@@ -4,7 +4,7 @@
 #include <avr/sleep.h>
 #include <avr/wdt.h>
 
-#include "BH1730.h"
+// #include "BH1730.h"
 #include "SHT31.h"
 #include "SPIMemory/src/SPIMemory.h"
 #include "SparkFunBME280.h"
@@ -208,7 +208,7 @@ class DS3231 {  // my own custom lib for control of the DS3231
 };
 
 DS3231 rtc;
-BH1730 lightSensor;
+// BH1730 lightSensor;
 #define SHT31_ADDRESS 0x44
 SHT31 sht;
 BME280 bme;
@@ -280,7 +280,7 @@ void printFrame(frame_t current) {  // prints one line of frame data
     Serial.println();
 }
 void printProjectHeader() {
-    Serial.println(F("TIME CAPSULE LONG DURATION ENVIROMENTAL LOGGER - v10 (2022-04-24) - Alan J. WIlson"));
+    Serial.println(F("TIME CAPSULE LONG DURATION ENVIROMENTAL LOGGER - v10 (2022-04-24) - Compiled 2022-11-30 - Alan J. Wilson"));
 }
 frame_t wakeupMeasure() {  // wake up from sleep, initialize and do the measurements
     Wire.begin();
@@ -310,10 +310,10 @@ frame_t wakeupMeasure() {  // wake up from sleep, initialize and do the measurem
 
     ADCSRA |= _BV(ADSC);  // for AVR therm
 
-    lightSensor.begin();
-    lightSensor.reset();
-    lightSensor.setGain(GAIN_X1);
-    lightSensor.measure();
+    // lightSensor.begin();
+    // lightSensor.reset();
+    // lightSensor.setGain(GAIN_X1);
+    // lightSensor.measure();
 
     while (bit_is_set(ADCSRA, ADSC))
         ;  // avr therm
@@ -327,8 +327,8 @@ frame_t wakeupMeasure() {  // wake up from sleep, initialize and do the measurem
     current.temperatureBME = bme.readTempC() * 100;
     current.humidityBME = bme.readFloatHumidity() * 100;
     current.pressureBME = bme.readFloatPressure();
-    current.lightVis = lightSensor.readVis();
-    current.lightIr = lightSensor.readIr();
+    current.lightVis = 255; //lightSensor.readVis();
+    current.lightIr = 255; //lightSensor.readIr();
     current.batteryADC = analogRead(A7);
     return current;
 }
@@ -601,7 +601,7 @@ void loop() {
     // sleep here
     bme.setMode(0);
     sht.reset();
-    lightSensor.reset();
+    // lightSensor.reset();
     flash.powerDown();
     digitalWrite(ledRed, LOW);
     digitalWrite(ledGreen, LOW);
