@@ -529,6 +529,8 @@ void consoleRun() {
 }
 
 void setup() {
+    MCUSR = 0;
+    wdt_disable();
     Serial.begin(115200);
     flash.begin(MB(16));
     wakeupMeasure();  // init hardware
